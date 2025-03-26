@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TodoApp.MainPage"
+             Title="My Todo List">
+    <Grid>
+        <CollectionView ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItem Text="Delete" 
+                                      Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommand}"
+                                      CommandParameter="{Binding .}"
+                                      BackgroundColor="Red"/>
+                        </SwipeView.RightItems>
+
+                        <Grid Padding="10">
+                            <CheckBox IsChecked="{Binding IsCompleted}"
+                                      HorizontalOptions="Start"/>
+                            <Label Text="{Binding Title}" 
+                                   FontSize="Medium"
+                                   HorizontalOptions="StartAndExpand"/>
+                            <Button Text="Edit" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+                                    CommandParameter="{Binding .}"
+                                    HorizontalOptions="End"/>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="Add Task" 
+                Clicked="OnAddClicked"
+                VerticalOptions="End"
+                HorizontalOptions="End"
+                Margin="20"/>
+    </Grid>
+</ContentPage>
