@@ -3,6 +3,7 @@ namespace todo_maui_reposetory.Pages;
 public partial class AddEditTodoPage : ContentPage
 {
     private TodoItem currentItem;
+    private string a = "Test";
 
     public AddEditTodoPage(TodoItem item)
     {
