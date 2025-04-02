@@ -1,4 +1,4 @@
-namespace todo_maui_reposetory;
+namespace todo_maui_reposetory.Pages;
 
 public partial class AddEditTodoPage : ContentPage
 {
@@ -13,12 +13,14 @@ public partial class AddEditTodoPage : ContentPage
 
     private async void OnSaveClicked(object sender, EventArgs e)
     {
-        var vm = (MainPage)Application.Current.MainPage.Navigation.NavigationStack.First();
-        if (!vm.viewModel.Items.Contains(currentItem))
+        if (Application.Current.MainPage is MainPage mainPage)
         {
-            vm.viewModel.Items.Add(currentItem);
+            if (!mainPage.ViewModel.Items.Contains(currentItem))
+            {
+                mainPage.ViewModel.Items.Add(currentItem);
+            }
+            mainPage.ViewModel.SaveItems();
         }
-        vm.viewModel.SaveItems();
         await Navigation.PopAsync();
     }
 }

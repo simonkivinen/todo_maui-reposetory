@@ -5,18 +5,20 @@ namespace todo_maui_reposetory.Pages
 {
     public partial class MainPage : ContentPage
     {
-        private TodoViewModel viewModel;
+
+        public TodoViewModel ViewModel { get; private set; }
 
         public MainPage()
         {
             InitializeComponent();
-            viewModel = new TodoViewModel();
-            BindingContext = viewModel;
+            ViewModel = new TodoViewModel();
+            BindingContext = ViewModel;
+
         }
 
         protected override void OnDisappearing()
         {
-            viewModel.SaveItems();
+            ViewModel.SaveItems();
             base.OnDisappearing();
         }
 
