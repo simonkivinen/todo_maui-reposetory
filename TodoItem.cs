@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace todo_maui_reposetory
 {   
     public class TodoItem
@@ -13,5 +13,9 @@ namespace todo_maui_reposetory
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public string Category { get; set; }
+        public string Name { get; set; }
+        public ObservableCollection<TodoItem> Items { get; set; } = new();
+
     }
 }

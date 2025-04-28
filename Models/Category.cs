@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace todo_maui_reposetory.Models
@@ -6,17 +7,14 @@ namespace todo_maui_reposetory.Models
     {
         public int ID { get; set; }
         public string Title { get; set; } = string.Empty;
-        public string Color { get; set; } = "#FF0000";
 
+        // Ändra namnet på egenskapen till HexColor
+        [JsonPropertyName("color")]
+        public string HexColor { get; set; } = "#FF0000";
         [JsonIgnore]
-        public Brush ColorBrush
-        {
-            get
-            {
-                return new SolidColorBrush(Microsoft.Maui.Graphics.Color.FromArgb(Color));
-            }
-        }
-
-        public override string ToString() => $"{Title}";
+        public Brush ColorBrush => new SolidColorBrush(Color.FromArgb(HexColor));
+        
     }
 }
+
+

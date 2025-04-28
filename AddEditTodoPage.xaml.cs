@@ -3,7 +3,6 @@ namespace todo_maui_reposetory.Pages;
 public partial class AddEditTodoPage : ContentPage
 {
     private TodoItem currentItem;
-    private string a = "Test";
 
     public AddEditTodoPage(TodoItem item)
     {
@@ -16,9 +15,9 @@ public partial class AddEditTodoPage : ContentPage
     {
         if (Application.Current.MainPage is MainPage mainPage)
         {
-            if (!mainPage.ViewModel.Items.Contains(currentItem))
+            if (!mainPage.ViewModel.Tasks.Contains(currentItem))
             {
-                mainPage.ViewModel.Items.Add(currentItem);
+                mainPage.ViewModel.Tasks.Add(currentItem);
             }
             mainPage.ViewModel.SaveItems();
         }
