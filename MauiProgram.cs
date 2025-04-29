@@ -11,8 +11,8 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<Tapp>()
+        _ = builder
+            .UseMauiApp<todo_maui_reposetory.App>()
             .UseMauiCommunityToolkit()  // Lägg till denna rad
             .ConfigureFonts(fonts =>
             {

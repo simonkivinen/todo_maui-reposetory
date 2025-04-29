@@ -27,6 +27,11 @@ namespace todo_maui_reposetory.Models
         public string Description { get; set; }
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; } = DateTime.Now;
+
+        public static explicit operator TodoItem(todo_maui_reposetory.TodoItem v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

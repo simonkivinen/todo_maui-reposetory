@@ -16,9 +16,19 @@ namespace todo_maui_reposetory.Pages
             BindingContext = viewModel;
         }
 
-        protected override void OnDisappearing()
+        private void InitializeComponent()
         {
-            (BindingContext as MainPageModel)?.SaveLists();
+            throw new NotImplementedException();
+        }
+
+        public object ViewModel { get; internal set; }
+
+        protected override async void OnDisappearing()
+        {
+            if (BindingContext is MainPageModel model)
+            {
+                await model.SaveAsync();
+            }
             base.OnDisappearing();
         }
     }

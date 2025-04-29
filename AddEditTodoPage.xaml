@@ -8,6 +8,7 @@
         <Editor Text="{Binding Description}" 
                 Placeholder="Description"
                 HeightRequest="100"/>
+        <CheckBox IsChecked="{Binding IsCompleted}" />
         <Button Text="Save" Clicked="OnSaveClicked"/>
     </StackLayout>
 </ContentPage>

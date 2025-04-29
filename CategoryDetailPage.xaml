@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="todo_maui_reposetory.CategoryDetailPage">
+    <Grid RowDefinitions="Auto,*">
+        <StackLayout Orientation="Horizontal" Spacing="10" Padding="10">
+            <Button Text="Lägg till uppgift" Clicked="OnAddTaskClicked"/>
+            <Button Text="Ta bort uppgift" Clicked="OnDeleteTaskClicked"/>
+        </StackLayout>
+        
+        <CollectionView Grid.Row="1" 
+                        ItemsSource="{Binding Tasks}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnTaskSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="5" Padding="10">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding Title}" FontSize="Medium"/>
+                            <Label Grid.Row="1" Text="{Binding Description}"/>
+                            <CheckBox Grid.Column="1" Grid.RowSpan="2" 
+                                     IsChecked="{Binding IsCompleted}"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

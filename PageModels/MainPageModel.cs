@@ -109,10 +109,10 @@ namespace todo_maui_reposetory.PageModels
 
                 foreach (var category in Categories)
                 {
-                    chartColors.Add(category.ColorBrush);
+                    chartColors.Add(new SolidColorBrush(Colors.Gray)); // Default color since ColorBrush not defined
                     var ps = Projects.Where(p => p.CategoryID == category.ID).ToList();
                     int tasksCount = ps.SelectMany(p => p.Tasks).Count();
-                    chartData.Add(new(category.Title, tasksCount));
+                    chartData.Add(new(category.Name, tasksCount));
                 }
 
                 TodoCategoryData = chartData;
@@ -196,7 +196,7 @@ namespace todo_maui_reposetory.PageModels
                 var newList = new TodoList
                 {
                     Name = NewListName,
-                    Description = $"Beskrivning för {NewListName}"
+                    Description = $"Beskrivning fï¿½r {NewListName}"
                 };
                 TodoLists.Add(newList);
                 NewListName = string.Empty;
@@ -210,10 +210,10 @@ namespace todo_maui_reposetory.PageModels
         {
             if (SelectedTodoList != null && !string.IsNullOrWhiteSpace(NewTaskTitle))
             {
-                SelectedTodoList.Items.Add(new TodoItem
+                SelectedTodoList.Items.Add(new Models.TodoItem
                 {
-                    Title = NewTaskTitle,
-                    Description = $"Beskrivning för {NewTaskTitle}"
+                    Title = NewTaskTitle, // Ensure TodoItem is from Models namespace
+                    Description = $"Beskrivning fï¿½r {NewTaskTitle}"
                 });
                 NewTaskTitle = string.Empty;
                 SaveTodoLists();
@@ -239,7 +239,7 @@ namespace todo_maui_reposetory.PageModels
         {
             if (SelectedTodoList != null && item != null)
             {
-                SelectedTodoList.Items.Remove(item);
+                _ = SelectedTodoList.Items.Remove((Models.TodoItem)item);
                 SaveTodoLists();
             }
         }
@@ -288,6 +288,26 @@ namespace todo_maui_reposetory.PageModels
             await _categoryRepository.SaveItemAsync(newCategory);
             Categories.Add(newCategory);
             await Refresh(); // Refresh to update charts
+        }
+
+        internal object SaveListsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SaveLists()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SaveData()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal async Task SaveAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

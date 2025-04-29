@@ -10,5 +10,10 @@ namespace todo_maui_reposetory.Models
 
         [JsonIgnore]
         public int ProjectID { get; set; }
+
+        internal object WhenAll(Task task1, Task task2)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
