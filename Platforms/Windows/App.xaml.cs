@@ -23,3 +23,11 @@ namespace todo_maui_reposetory.WinUI
     }
 
 }
+public partial class App : Application  // Måste heta "App"
+{
+    public App()
+    {
+        InitializeComponent();
+        MainPage = new MainPage();
+    }
+}

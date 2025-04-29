@@ -1,40 +1,71 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<!-- Pages/MainPage.xaml -->
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="todo_maui_reposetory.Pages.MainPage"
+             xmlns:controls="clr-namespace:todo_maui_reposetory.Pages.Controls"
+             xmlns:viewModels="clr-namespace:todo_maui_reposetory.PageModels"
+             x:DataType="viewModels:MainPageModel"
              Title="My Todo List">
-    <Grid>
-        <CollectionView ItemsSource="{Binding Items}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <SwipeView>
-                        <SwipeView.RightItems>
-                            <SwipeItem Text="Delete" 
-                                      Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommand}"
-                                      CommandParameter="{Binding .}"
-                                      BackgroundColor="Red"/>
-                        </SwipeView.RightItems>
 
-                        <Grid Padding="10">
-                            <CheckBox IsChecked="{Binding IsCompleted}"
-                                      HorizontalOptions="Start"/>
-                            <Label Text="{Binding Title}" 
-                                   FontSize="Medium"
-                                   HorizontalOptions="StartAndExpand"/>
-                            <Button Text="Edit" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditCommand}"
+    <Grid ColumnDefinitions="*,2*,2*" ColumnSpacing="20" Padding="20">
+        <!-- Vänster panel - Listor -->
+        <StackLayout Grid.Column="0" Spacing="10">
+            <Label Text="Kategorier" FontSize="20" FontAttributes="Bold"/>
+
+            <Entry Text="{Binding NewListName}" 
+                   Placeholder="Ny lista namn"
+                   ReturnCommand="{Binding AddListCommand}"/>
+
+            <Button Text="Lägg till lista" 
+                    Command="{Binding AddListCommand}"
+                    BackgroundColor="{StaticResource Primary}"/>
+
+            <CollectionView ItemsSource="{Binding Lists}"
+                          SelectedItem="{Binding SelectedList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="*,Auto">
+                            <Label Text="{Binding Name}" 
+                                  FontSize="16"/>
+                            <Button Text="Ta bort" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainPageModel}}, Path=DeleteListCommand}"
                                     CommandParameter="{Binding .}"
-                                    HorizontalOptions="End"/>
+                                    Grid.Column="1"/>
                         </Grid>
-                    </SwipeView>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
 
-        <Button Text="Add Task" 
-                Clicked="OnAddClicked"
-                VerticalOptions="End"
-                HorizontalOptions="End"
-                Margin="20"/>
+        <!-- Mittenpanel - Vald lista -->
+        <StackLayout Grid.Column="1" Spacing="10">
+            <Label Text="{Binding SelectedList.Name}" 
+                   FontSize="20" FontAttributes="Bold"/>
+
+            <Entry Text="{Binding NewTaskTitle}"
+                   Placeholder="Ny uppgift"
+                   ReturnCommand="{Binding AddTaskCommand}"/>
+
+            <Button Text="Lägg till + återvänd"
+                   Command="{Binding AddTaskCommand}"
+                   BackgroundColor="{StaticResource Primary}"/>
+
+            <CollectionView ItemsSource="{Binding SelectedList.Items}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:TaskView />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+        <!-- Högerpanel - Detaljer -->
+        <StackLayout Grid.Column="2" Spacing="10">
+            <Label Text="Beskrivning" FontSize="20" FontAttributes="Bold"/>
+            <Editor Text="{Binding SelectedList.Description}"
+                   HeightRequest="150"
+                   AutoSize="TextChanges"/>
+        </StackLayout>
     </Grid>
 </ContentPage>

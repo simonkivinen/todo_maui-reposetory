@@ -1,30 +1,35 @@
 ﻿using todo_maui_reposetory.Models;
 using todo_maui_reposetory.PageModels;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using todo_maui_reposetory.PageModels;
 
 namespace todo_maui_reposetory.Pages
 {
     public partial class MainPage : ContentPage
     {
-
-        public TodoViewModel ViewModel { get; private set; }
-
-        public MainPage()
+        public MainPage(MainPageModel viewModel)
         {
             InitializeComponent();
-            ViewModel = new TodoViewModel();
-            BindingContext = ViewModel;
-
+            BindingContext = viewModel;
         }
 
-        protected override void OnDisappearing()
+        private void InitializeComponent()
         {
-            ViewModel.SaveItems();
+            throw new NotImplementedException();
+        }
+
+        public object ViewModel { get; internal set; }
+
+        protected override async void OnDisappearing()
+        {
+            if (BindingContext is MainPageModel model)
+            {
+                await model.SaveAsync();
+            }
             base.OnDisappearing();
-        }
-
-        private async void OnAddClicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new AddEditTodoPage(new TodoItem()));
         }
     }
 }

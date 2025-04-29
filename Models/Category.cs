@@ -1,22 +1,18 @@
+using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
 namespace todo_maui_reposetory.Models
 {
     public class Category
     {
-        public int ID { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Color { get; set; } = "#FF0000";
-
-        [JsonIgnore]
-        public Brush ColorBrush
-        {
-            get
-            {
-                return new SolidColorBrush(Microsoft.Maui.Graphics.Color.FromArgb(Color));
-            }
-        }
-
-        public override string ToString() => $"{Title}";
+        internal int Id;
+        internal int ID;
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public ObservableCollection<TodoTask> Tasks { get; set; } = new();
+        public string Title { get; internal set; }
+        public string HexColor { get; internal set; }
     }
 }
+
+

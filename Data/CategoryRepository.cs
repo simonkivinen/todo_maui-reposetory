@@ -51,33 +51,11 @@ namespace todo_maui_reposetory.Data
 
             _hasBeenInitialized = true;
         }
-
-        /// <summary>
-        /// Retrieves a list of all categories from the database.
-        /// </summary>
-        /// <returns>A list of <see cref="Category"/> objects.</returns>
-        public async Task<List<Category>> ListAsync()
+        public async Task<Category> CreateDefaultCategory()
         {
-            await Init();
-            await using var connection = new SqliteConnection(Constants.DatabasePath);
-            await connection.OpenAsync();
-
-            var selectCmd = connection.CreateCommand();
-            selectCmd.CommandText = "SELECT * FROM Category";
-            var categories = new List<Category>();
-
-            await using var reader = await selectCmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                categories.Add(new Category
-                {
-                    ID = reader.GetInt32(0),
-                    Title = reader.GetString(1),
-                    Color = reader.GetString(2)
-                });
-            }
-
-            return categories;
+            var defaultCategory = new Category { Title = "Standard", HexColor = "#808080" };
+            await SaveItemAsync(defaultCategory);
+            return defaultCategory;
         }
 
         /// <summary>
@@ -102,7 +80,7 @@ namespace todo_maui_reposetory.Data
                 {
                     ID = reader.GetInt32(0),
                     Title = reader.GetString(1),
-                    Color = reader.GetString(2)
+                    HexColor = reader.GetString(2)
                 };
             }
 
@@ -137,7 +115,7 @@ namespace todo_maui_reposetory.Data
             }
 
             saveCmd.Parameters.AddWithValue("@Title", item.Title);
-            saveCmd.Parameters.AddWithValue("@Color", item.Color);
+            saveCmd.Parameters.AddWithValue("@Color", item.HexColor);
 
             var result = await saveCmd.ExecuteScalarAsync();
             if (item.ID == 0)
@@ -180,6 +158,29 @@ namespace todo_maui_reposetory.Data
 
             await dropTableCmd.ExecuteNonQueryAsync();
             _hasBeenInitialized = false;
+        }
+        public async Task<List<Category>> ListAsync()
+        {
+            await Init();
+            await using var connection = new SqliteConnection(Constants.DatabasePath);
+            await connection.OpenAsync();
+
+            var selectCmd = connection.CreateCommand();
+            selectCmd.CommandText = "SELECT * FROM Category";
+            var categories = new List<Category>();
+
+            await using var reader = await selectCmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                categories.Add(new Category
+                {
+                    ID = reader.GetInt32(0),
+                    Title = reader.GetString(1),
+                    HexColor = reader.GetString(2)
+                });
+            }
+
+            return categories;
         }
     }
 }

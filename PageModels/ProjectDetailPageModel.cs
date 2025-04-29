@@ -55,6 +55,8 @@ namespace todo_maui_reposetory.PageModels
         public bool HasCompletedTasks
             => _project?.Tasks.Any(t => t.IsCompleted) ?? false;
 
+        public ProjectTask Task { get; internal set; }
+
         public ProjectDetailPageModel(ProjectRepository projectRepository, TaskRepository taskRepository, CategoryRepository categoryRepository, TagRepository tagRepository, ModalErrorHandler errorHandler)
         {
             _projectRepository = projectRepository;
@@ -68,9 +70,9 @@ namespace todo_maui_reposetory.PageModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.ContainsKey("id"))
+            if (query.TryGetValue("id", out object? value))
             {
-                int id = Convert.ToInt32(query["id"]);
+                int id = Convert.ToInt32(value);
                 LoadData(id).FireAndForgetSafeAsync(_errorHandler);
             }
             else if (query.ContainsKey("refresh"))
@@ -79,7 +81,7 @@ namespace todo_maui_reposetory.PageModels
             }
             else
             {
-                Task.WhenAll(LoadCategories(), LoadTags()).FireAndForgetSafeAsync(_errorHandler);
+                System.Threading.Tasks.Task.WhenAll(LoadCategories(), LoadTags()).FireAndForgetSafeAsync(_errorHandler);
                 _project = new();
                 _project.Tags = [];
                 _project.Tasks = [];
