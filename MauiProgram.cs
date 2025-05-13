@@ -1,28 +1,27 @@
-﻿using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
-using Syncfusion.Maui.Toolkit.Hosting;
+﻿using Microsoft.Extensions.Logging;
+using todo_maui_reposetory.Data;
 using CommunityToolkit.Maui;
-using todo_maui_reposetory.PageModels;
-using todo_maui_reposetory.Pages;
 
-
-public static class MauiProgram
+namespace todo_maui_reposetory
 {
-    public static MauiApp CreateMauiApp()
+    public static class MauiProgram
     {
-        var builder = MauiApp.CreateBuilder();
-        _ = builder
-            .UseMauiApp<todo_maui_reposetory.App>()
-            .UseMauiCommunityToolkit()  // Lägg till denna rad
-            .ConfigureFonts(fonts =>
+        public static MauiApp CreateMauiApp()
+        {
+            var builder = MauiApp.CreateBuilder();
+            _ = builder.UseMauiApp<App>().ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            }).UseMauiCommunityToolkit();
+            builder.Services.AddSingleton<CategoryRepository>();
+            builder.Services.AddSingleton<TaskRepository>();
+            builder.Services.AddSingleton<TagRepository>();
+            builder.Services.AddLogging(logging =>
+            {
+                logging.AddDebug();
             });
-
-        // Register ViewModels and Pages
-        builder.Services.AddSingleton<MainPageModel>();
-        builder.Services.AddSingleton<MainPage>();
-
-        return builder.Build();
+            return builder.Build();
+        }
     }
 }

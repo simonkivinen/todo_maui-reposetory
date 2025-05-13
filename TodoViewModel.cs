@@ -7,12 +7,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using todo_maui_reposetory.Models;
 
 namespace todo_maui_reposetory
 {
     public class TodoViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<TodoItem> _items;
+        private ObservableCollection<TodoItem> _items = new();  // Initiera direkt
         private string _dataFile;
 
         public ObservableCollection<TodoItem> Items
@@ -50,9 +51,9 @@ namespace todo_maui_reposetory
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public event PropertyChangedEventHandler? PropertyChanged;  // Gör nullable
+        
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

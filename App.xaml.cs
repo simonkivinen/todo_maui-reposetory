@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
+using todo_maui_reposetory.Views;
+using todo_maui_reposetory.Data;
 
 namespace todo_maui_reposetory
 {
@@ -9,7 +12,7 @@ namespace todo_maui_reposetory
             InitializeComponent();
         }
 
-        public static ILogger<TaskRepository> Logger { get; internal set; }
+        public static ILogger<TaskRepository> Logger { get; set; } = default!;
 
         protected override Window CreateWindow(IActivationState? activationState)
         {

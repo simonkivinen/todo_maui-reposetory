@@ -10,8 +10,11 @@ namespace todo_maui_reposetory
         {
             InitializeComponent();
             var currentTheme = Application.Current!.UserAppTheme;
-            ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
+            ((Syncfusion.Maui.Toolkit.SfSegmentedControl)ThemeSegmentedControl).SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
         }
+
+        public object ThemeSegmentedControl { get; }
+
         public static async Task DisplaySnackbarAsync(string message)
         {
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();

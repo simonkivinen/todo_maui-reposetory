@@ -1,6 +1,8 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using todo_maui_reposetory.Models;
+using Microsoft.Maui.Storage;
+using todo_maui_reposetory.Data;
 
 namespace todo_maui_reposetory.Data
 {
@@ -24,32 +26,45 @@ namespace todo_maui_reposetory.Data
 
         public async Task LoadSeedDataAsync()
         {
-            ClearTables();
-
-            await using Stream templateStream = await FileSystem.OpenAppPackageFileAsync(_seedDataFilePath);
-
-            ProjectsJson? payload = null;
-            try
+            try 
             {
-                payload = JsonSerializer.Deserialize(templateStream, JsonContext.Default.ProjectsJson);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error deserializing seed data");
-            }
+                await ClearTables();
 
-            try
-            {
-                if (payload is not null)
+                await using Stream templateStream = await FileSystem.OpenAppPackageFileAsync(_seedDataFilePath);
+                if (templateStream == null)
                 {
-                    foreach (var project in payload.Projects)
-                    {
-                        if (project is null)
-                        {
-                            continue;
-                        }
+                    _logger.LogError("Kunde inte öppna seed data filen");
+                    return;
+                }
 
-                        if (project.Category is not null)
+                ProjectsJson? payload = null;
+                try
+                {
+                    await using var jsonStream = new MemoryStream();
+                    await templateStream.CopyToAsync(jsonStream);
+                    jsonStream.Position = 0;
+                    
+                    payload = await JsonSerializer.DeserializeAsync<ProjectsJson>(jsonStream, JsonContext.Default.ProjectsJson);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Fel vid deserialisering av seed data");
+                    return;
+                }
+
+                if (payload?.Projects == null)
+                {
+                    _logger.LogWarning("Inga projekt hittades i seed data");
+                    return;
+                }
+
+                foreach (var project in payload.Projects)
+                {
+                    if (project == null) continue;
+
+                    try
+                    {
+                        if (project.Category != null)
                         {
                             await _categoryRepository.SaveItemAsync(project.Category);
                             project.CategoryID = project.Category.ID;
@@ -57,7 +72,7 @@ namespace todo_maui_reposetory.Data
 
                         await _projectRepository.SaveItemAsync(project);
 
-                        if (project?.Tasks is not null)
+                        if (project.Tasks != null)
                         {
                             foreach (var task in project.Tasks)
                             {
@@ -66,7 +81,7 @@ namespace todo_maui_reposetory.Data
                             }
                         }
 
-                        if (project?.Tags is not null)
+                        if (project.Tags != null)
                         {
                             foreach (var tag in project.Tags)
                             {
@@ -74,16 +89,20 @@ namespace todo_maui_reposetory.Data
                             }
                         }
                     }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"Fel vid sparande av projekt {project.Title}");
+                    }
                 }
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error saving seed data");
+                _logger.LogError(e, "Kritiskt fel vid laddning av seed data");
                 throw;
             }
         }
 
-        private async void ClearTables()
+        private async Task ClearTables()
         {
             try
             {
@@ -95,7 +114,8 @@ namespace todo_maui_reposetory.Data
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Fel vid rensning av tabeller");
+                throw;
             }
         }
     }

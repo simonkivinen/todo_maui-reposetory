@@ -211,8 +211,7 @@ namespace todo_maui_reposetory.PageModels
                 return;
             }
 
-            // Pass the project so if this is a new project we can just add
-            // the tasks to the project and then save them all from here.
+            
             await Shell.Current.GoToAsync($"task",
                 new ShellNavigationQueryParameters(){
                     {TaskDetailPageModel.ProjectQueryKey, _project}

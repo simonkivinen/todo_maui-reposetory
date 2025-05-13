@@ -1,3 +1,4 @@
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using todo_maui_reposetory.Data;
@@ -149,7 +150,9 @@ namespace todo_maui_reposetory.PageModels
             if (_task.ID > 0)
                 await AppShell.DisplayToastAsync("Task saved");
         }
-
+        ProjectTask projectTask = new ProjectTask
+        {
+        };
         [RelayCommand(CanExecute = nameof(CanDelete))]
         private async Task Delete()
         {

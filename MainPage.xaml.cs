@@ -17,7 +17,7 @@ public partial class MainPage : ContentPage
 
     private async void OnAddCategoryClicked(object sender, EventArgs e)
     {
-        var category = new Category { Name = "Ny kategori", Description = "Beskrivning" };
+        var category = new Category();
         Categories.Add(category);
     }
 
@@ -31,10 +31,8 @@ public partial class MainPage : ContentPage
     {
         if (e.CurrentSelection.FirstOrDefault() is Category category)
         {
-            // TODO: Add using directive for CategoryDetailPage or create the CategoryDetailPage class
-            // For now, display category details in a simple alert
             await DisplayAlert("Category Details", 
-                $"Name: {category.Name}\nDescription: {category.Description}", 
+                $"Category Details",
                 "OK");
         }
     }

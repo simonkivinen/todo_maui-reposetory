@@ -2,8 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using todo_maui_reposetory.Models;
-using todo_maui_reposetory.Data;
-using todo_maui_reposetory.Services;
 using System.Text.Json;
 
 namespace todo_maui_reposetory.PageModels
@@ -60,7 +58,7 @@ namespace todo_maui_reposetory.PageModels
         [ObservableProperty]
         private string _today = DateTime.Now.ToString("dddd, MMM d");
 
-        public bool HasCompletedTasks => Tasks?.Any(t => t.IsCompleted) ?? false;
+        public bool HasCompletedTasks => Tasks?.Any(static t => t.IsCompleted) ?? false;
 
         public MainPageModel(SeedDataService seedDataService, ProjectRepository projectRepository,
             TaskRepository taskRepository, CategoryRepository categoryRepository, ModalErrorHandler errorHandler)
@@ -210,7 +208,7 @@ namespace todo_maui_reposetory.PageModels
         {
             if (SelectedTodoList != null && !string.IsNullOrWhiteSpace(NewTaskTitle))
             {
-                SelectedTodoList.Items.Add(new Models.TodoItem
+                SelectedTodoList.Items.Add(new TodoItem
                 {
                     Title = NewTaskTitle, // Ensure TodoItem is from Models namespace
                     Description = $"Beskrivning f�r {NewTaskTitle}"
@@ -290,24 +288,32 @@ namespace todo_maui_reposetory.PageModels
             await Refresh(); // Refresh to update charts
         }
 
-        internal object SaveListsAsync()
+        internal async Task SaveAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        internal void SaveLists()
-        {
-            throw new NotImplementedException();
+            SaveData();
+            SaveLists();
+            await SaveListsAsync();
         }
 
         internal void SaveData()
         {
-            throw new NotImplementedException();
+            var preferences = Preferences.Default;
+            preferences.Set("LastSaveDate", DateTime.Now.ToString());
         }
 
-        internal async Task SaveAsync()
+        internal void SaveLists()
         {
-            throw new NotImplementedException();
+            var json = JsonSerializer.Serialize(TodoLists);
+            Preferences.Set("TodoLists", json);
+        }
+
+        internal async Task SaveListsAsync()
+        {
+            foreach (var list in TodoLists)
+            {
+                // Spara eventuella ändringar i databasen här
+                // await _repository.SaveListAsync(list);
+            }
         }
     }
 }

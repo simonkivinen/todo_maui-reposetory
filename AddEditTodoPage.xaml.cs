@@ -1,35 +1,26 @@
 using Microsoft.Extensions.Logging;
+using todo_maui_reposetory.Models;
+using todo_maui_reposetory.Data;
 
-namespace todo_maui_reposetory.Pages;
-
-public partial class AddEditTodoPage : ContentPage
+namespace todo_maui_reposetory.Pages
 {
-    private readonly ProjectDetailPageModel currentTask;
-    private readonly ProjectDetailPageModel projectModel;
-
-    public AddEditTodoPage(Models.ProjectTask task, ProjectDetailPageModel model)
+    public partial class AddEditTodoPage : ContentPage
     {
-        InitializeComponent();
-        currentTask = new ProjectDetailPageModel(
-            new ProjectRepository(new TaskRepository(App.Logger as ILogger<TaskRepository>), new TagRepository(App.Logger as ILogger<TagRepository>), App.Logger as ILogger<ProjectRepository>),
-            new TaskRepository(App.Logger),
-            new CategoryRepository(App.Logger as ILogger<CategoryRepository>),
-            new TagRepository(App.Logger as ILogger<TagRepository>),
-            new ModalErrorHandler())
-        { 
-           
-            Task = task,
-        };
-        projectModel = model;
-        BindingContext = currentTask;
-    }
+        private readonly TodoTask _currentTask;
+        private readonly TaskRepository _taskRepository;
 
-    private async void OnSaveClicked(object sender, EventArgs e)
-    {
-        if (!projectModel.Tasks.Contains(currentTask.Task))
+        public AddEditTodoPage(TodoTask task, TaskRepository taskRepository)
         {
-            projectModel.Tasks.Add(currentTask.Task);
+            InitializeComponent();
+            _currentTask = task;
+            _taskRepository = taskRepository;
+            BindingContext = _currentTask;
         }
-        await Navigation.PopAsync();
+
+        private async void OnSaveClicked(object sender, EventArgs e)
+        {
+            await _taskRepository.SaveItemAsync(_currentTask);
+            await Navigation.PopAsync();
+        }
     }
 }
