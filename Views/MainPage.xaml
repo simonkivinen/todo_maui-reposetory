@@ -1,0 +1,33 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="todoapp.MainPage"
+             BackgroundColor="#D6A82A">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Label Text="Category list" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" Grid.Row="0" />
+
+        <StackLayout Orientation="Horizontal" Grid.Row="0">
+            <Button Text="Add list +" Clicked="OnAddListClicked" BackgroundColor="#FFA500" />
+        </StackLayout>
+
+        <ListView ItemsSource="{Binding Categories}" 
+                  Grid.Row="1" 
+                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                  ItemSelected="OnListSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout>
+                            <Label Text="{Binding Name}" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentPage>

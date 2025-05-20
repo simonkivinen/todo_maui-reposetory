@@ -1,0 +1,21 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="todoapp.TaskPage"
+             Title="Task Details"
+             BackgroundColor="#B0BEC5">
+
+    <StackLayout Padding="10">
+        <Label Text="Description" FontAttributes="Bold" HorizontalOptions="Start" />
+        <Editor x:Name="DescriptionEditor" Placeholder="Enter task description here..." HeightRequest="100" />
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <Button Text="Update" 
+                    BackgroundColor="#FFA500" 
+                    Command="{Binding UpdateTaskCommand}"/>
+            <Button Text="Delete" 
+                    BackgroundColor="#FF0000" 
+                    TextColor="White" 
+                    Command="{Binding DeleteTaskCommand}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>
